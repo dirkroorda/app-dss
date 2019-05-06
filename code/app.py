@@ -2,68 +2,81 @@ import os
 
 from tf.core.helpers import mdhtmlEsc, htmlEsc, mdEsc
 from tf.applib.helpers import dh
-from tf.applib.display import prettyPre, getFeatures
+from tf.applib.display import prettyPre, getBoundary, getFeatures
 from tf.applib.highlight import hlText, hlRep
 from tf.applib.api import setupApi
 from tf.applib.links import outLink
-from atf import Atf
 
 REPORT_DIR = 'reports'
 
-DOCUMENT = 'document'
-FACE = 'face'
+SCROLL = 'scroll'
+FRAGMENT = 'fragment'
 LINE = 'line'
 CLUSTER = 'cluster'
 WORD = 'word'
 SIGN = 'sign'
 
-ATF_TYPES = set('''
-    sign
-    cluster
-'''.strip().split())
+BOOK = 'book'
+CHAPTER = 'chapter'
+VERSE = 'verse'
+HALFVERSE = 'halfverse'
 
-COMMENTLINE = 'commentline'
-
-COMMENT_FEATURES = '''
-  comment
-  remarks
-'''.strip().split()
+BIBLICAL = 'biblical'
+SRCLN = 'srcLn'
+LANG = 'lang'
+INTERLINEAR = 'interlinear'
 
 CONTENT_FEATURES = '''
-  repeat
-  fraction
-  operator
-  grapheme
+  glyph
+  glyphe
+  glypho
 '''.strip().split()
 
 FLAG_FEATURES = '''
-    collated
-    remarkable
-    question
-    damage
+    uncertain
 '''.strip().split()
 
 CLUSTER_FEATURES = '''
-    det
     uncertain
-    missing
-    excised
-    supplied
-    langalt
+    correction
+    removed
+    reconstruction
+    alternative
+    vacat
 '''.strip().split()
 
-MODIFIERS = FLAG_FEATURES + CLUSTER_FEATURES[1:-1]
+LEX_FEATURES = '''
+    lang
+    lex
+'''.strip().split()
 
-SIGN_FEATURES = FLAG_FEATURES + CLUSTER_FEATURES + COMMENT_FEATURES + CONTENT_FEATURES
+MORPH_FEATURES = '''
+    sp
+    cl
+    ps
+    gn
+    nu
+    st
+    cs
+    vs
+    vt
+    md
+'''.strip().split()
+
+WORD_FEATURES = [BIBLICAL] + LEX_FEATURES + MORPH_FEATURES
+
+MODIFIERS = [LANG, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:]
+
+SIGN_FEATURES = FLAG_FEATURES + CLUSTER_FEATURES + CONTENT_FEATURES
 
 URL_FORMAT = (
-    'https://cdli.ucla.edu/search/search_results.php?SearchMode=Text&ObjectID={}'
+    "https://www.deadseascrolls.org.il/explore-the-archive/search#q='{}'"
 )
 
-SECTION = {DOCUMENT, FACE, LINE}
+SECTION = {SCROLL, FRAGMENT, LINE}
 
 
-class TfApp(Atf):
+class TfApp(object):
 
   def __init__(app, *args, _asApp=False, silent=False, **kwargs):
     setupApi(app, *args, _asApp=_asApp, silent=silent, **kwargs)
@@ -84,7 +97,7 @@ class TfApp(Atf):
     href = '#' if _noUrl else URL_FORMAT.format(pNum)
     if text is None:
       text = passageText
-      title = f'show this {DOCUMENT} on CDLI'
+      title = f'show this {SCROLL} in the Leon Levy library'
     else:
       title = passageText
     if _noUrl:
@@ -103,62 +116,27 @@ class TfApp(Atf):
       return result
     dh(result)
 
-  def fmt_layoutRich(app, n):
-    return app._wrapHtml(n, 'r')
+  def fmt_layoutTrans(app, n):
+    return app._wrapHtml(n, 'glyph', 'e')
+
+  def fmt_layoutTransX(app, n):
+    return app._wrapHtml(n, 'full', 'e')
 
   def fmt_layoutUnicode(app, n):
-    return app._wrapHtml(n, 'u')
+    return app._wrapHtml(n, 'glyph', '')
 
-  def _wrapHtml(app, n, kind):
+  def fmt_layoutUnicodeX(app, n):
+    return app._wrapHtml(n, 'full', '')
+
+  def _wrapHtml(app, n, ft, kind):
     api = app.api
     F = api.F
     Fs = api.Fs
-    typ = F.type.v(n)
-    after = (F.afteru.v(n) if kind == 'u' else F.after.v(n)) or ''
-    if typ == 'empty':
-      material = '<span class="empty">∅</span>'
-    elif typ == 'comment' or typ == 'commentline':
-      material = f'<span class="comment">{F.comment.v(n)}</span>'
-    elif typ == 'unknown':
-      partR = Fs("reading" + kind).v(n) or ''
-      if partR:
-        partR = f'<span class="r">{partR}</span>'
-      partG = Fs("grapheme" + kind).v(n) or ''
-      if partG:
-        partG = f'<span class="g">{partG}</span>'
-      material = f'<span class="uncertain">{partR}{partG}</span>'
-    elif typ == 'ellipsis':
-      material = f'<span class="missing">{Fs("grapheme" + kind).v(n)}</span>'
-    elif typ == 'reading':
-      material = f'<span class="r">{Fs("reading" + kind).v(n)}</span>'
-    elif typ == 'grapheme':
-      material = f'<span class="g">{Fs("grapheme" + kind).v(n)}</span>'
-    elif typ == 'numeral':
-      if kind == 'u':
-        material = F.symu.v(n)
-      else:
-        part = f'<span class="r">{Fs("reading" + kind).v(n) or ""}</span>'
-        partG = Fs("grapheme" + kind).v(n) or ''
-        if partG:
-          partG = f'<span class="g">{partG}</span>'
-        part = f'{part}{partG}'
-        material = (
-            f'<span class="quantity">{F.repeat.v(n) or ""}{F.fraction.v(n) or ""}</span>⌈{part}⌉'
-        )
-    elif typ == 'complex':
-      partR = f'<span class="r">{Fs("reading" + kind).v(n) or ""}</span>'
-      partG = f'<span class="g">{Fs("grapheme" + kind).v(n) or ""}</span>'
-      operator = f'<span class="operator">{Fs("operator" + kind).v(n) or ""}</span>'
-      material = f'{partR}{operator}⌈{partG}⌉'
-    else:
-      material = Fs("sym" + kind).v(n)
-    classes = ' '.join(cf for cf in MODIFIERS if Fs(cf).v(n))
+    after = F.after.v(n) or ''
+    material = Fs(f'{ft}{kind}').v(n) or ''
+    classes = ' '.join(f'{cf}{Fs(cf).v(n)}' for cf in MODIFIERS if Fs(cf).v(n))
     if classes:
       material = f'<span class="{classes}">{material}</span>'
-    if F.det.v(n):
-      material = f'<span class="det">{material}</span>'
-    if F.langalt.v(n):
-      material = f'<span class="langalt">{material}</span>'
     return f'{material}{after}'
 
   def _plain(
@@ -198,9 +176,9 @@ class TfApp(Atf):
         sep2 = app.sectionSep2
         label = (
             '{}'
-            if nType == DOCUMENT else
+            if nType == SCROLL else
             f'{{}}{sep1}{{}}'
-            if nType == FACE else
+            if nType == FRAGMENT else
             f'{{}}{sep1}{{}}{sep2}{{}}'
         )
         rep = label.format(*T.sectionFromNode(n))
@@ -212,13 +190,16 @@ class TfApp(Atf):
         rep = ''
       if nType == LINE:
         text = hlText(app, L.d(n, otype=SIGN), d.highlights, fmt=d.fmt)
-      elif nType == FACE:
+      elif nType == FRAGMENT:
         rep += mdhtmlEsc(f'{nType} {F.face.v(n)}') if secLabel else ''
-      elif nType == DOCUMENT:
+      elif nType == SCROLL:
         rep += mdhtmlEsc(f'{nType} {F.pnumber.v(n)}') if secLabel else ''
       rep = hlRep(app, rep, n, d.highlights)
       if text:
         text = hlRep(app, text, n, d.highlights)
+    elif nType == 'lex':
+      rep = mdhtmlEsc(F.lex.v(n))
+      rep = hlRep(app, rep, n, d.highlights)
     else:
       rep = hlText(app, L.d(n, otype=SIGN), d.highlights, fmt=d.fmt)
     lineNumbersCondition = d.lineNumbers
@@ -245,7 +226,7 @@ class TfApp(Atf):
       rep = app.webLink(n, text=rep, _asString=True)
     theLine = ''
     if lineNumbers:
-      theLine = mdEsc(f' @{F.srcLnNum.v(n)} ')
+      theLine = mdEsc(f' @{F.srcLn.v(n)} ')
     return f'{rep}{nodeRep}{theLine}'
 
   def _pretty(
@@ -302,15 +283,15 @@ class TfApp(Atf):
 
     if bigType:
       children = ()
-    elif nType == DOCUMENT:
-      children = L.d(n, otype=FACE)
-    elif nType == FACE:
+    elif nType == SCROLL:
+      children = L.d(n, otype=FRAGMENT)
+    elif nType == FRAGMENT:
       children = L.d(n, otype=LINE)
     elif nType == LINE:
       children = tuple(
           c
           for c in L.d(n)
-          if F.otype.v(c) == WORD or F.type.v(c) == COMMENTLINE
+          if F.otype.v(c) == WORD
       )
     elif nType == WORD:
       children = L.d(n, otype=SIGN)
@@ -319,30 +300,28 @@ class TfApp(Atf):
 
     isText = False
 
-    if nType == DOCUMENT:
+    if nType == SCROLL:
       heading = htmlEsc(F.pnumber.v(n))
       heading += ' '
       heading += getFeatures(
           app,
           n,
-          ('collection', 'volume', 'docnumber', 'docnote'),
+          (BIBLICAL, SCROLL),
           plain=True,
           **options,
       )
-    elif nType == FACE:
+    elif nType == FRAGMENT:
       heading = htmlEsc(F.face.v(n))
       featurePart = getFeatures(
           app,
           n,
-          ('object',),
+          (BIBLICAL, FRAGMENT),
           **options,
       )
     elif nType == LINE:
       heading = htmlEsc(F.lnno.v(n))
       className = LINE
-      theseFeats = ('remarks', 'translation@en')
-      if d.lineNumbers:
-        theseFeats = ('srcLnNum',) + theseFeats
+      theseFeats = (BIBLICAL, LINE)
       featurePart = getFeatures(
           app,
           n,
@@ -361,12 +340,27 @@ class TfApp(Atf):
       isText = True
       text = T.text(n, fmt=d.fmt, descend=True)
       heading = text if isHtml else htmlEsc(text)
+      theseFeats = WORD_FEATURES
+      if d.lineNumbers:
+        theseFeats = (SRCLN,) + theseFeats
       featurePart = getFeatures(
           app,
           n,
-          (),
+          theseFeats,
           **options,
       )
+    elif nType == 'lex':
+      extremeOccs = getBoundary(api, n)
+      linkOccs = ' - '.join(app.webLink(lo, _asString=True) for lo in extremeOccs)
+      heading = f'<div class="h">{htmlEsc(F.lex.v(n))}</div>'
+      occs = f'<div class="occs">{linkOccs}</div>'
+      featurePart = getFeatures(
+          app,
+          n,
+          ('voc_lex', 'gloss'),
+          givenValue=dict(voc_lex=app.webLink(n, text=htmlEsc(F.voc_lex.v(n)), _asString=True)),
+          **options,
+      ) + occs
     elif nType == slotType:
       isText = True
       text = T.text(n, fmt=d.fmt)
