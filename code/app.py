@@ -24,7 +24,7 @@ HALFVERSE = 'halfverse'
 BIBLICAL = 'biblical'
 SRCLN = 'srcLn'
 LANG = 'lang'
-INTERLINEAR = 'interlinear'
+INTERLINEAR = 'intl'
 
 CONTENT_FEATURES = '''
   glyph
@@ -33,16 +33,16 @@ CONTENT_FEATURES = '''
 '''.strip().split()
 
 FLAG_FEATURES = '''
-    uncertain
+    unc
 '''.strip().split()
 
 CLUSTER_FEATURES = '''
-    uncertain
-    correction
-    removed
-    reconstruction
-    alternative
-    vacat
+    unc
+    cor
+    rem
+    rec
+    alt
+    vac
 '''.strip().split()
 
 LEX_FEATURES = '''
@@ -57,17 +57,14 @@ MORPH_FEATURES = '''
     gn
     nu
     st
-    cs
     vs
     vt
     md
 '''.strip().split()
 
-WORD_FEATURES = [BIBLICAL] + LEX_FEATURES + MORPH_FEATURES
+WORD_FEATURES = tuple([BIBLICAL] + LEX_FEATURES + MORPH_FEATURES)
 
-MODIFIERS = [LANG, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:]
-
-SIGN_FEATURES = FLAG_FEATURES + CLUSTER_FEATURES + CONTENT_FEATURES
+MODIFIERS = tuple([LANG, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:])
 
 URL_FORMAT = (
     "https://www.deadseascrolls.org.il/explore-the-archive/search#q='{}'"
@@ -92,9 +89,9 @@ class TfApp(object):
     api = app.api
     T = api.T
 
-    (pNum, face, lnno) = T.sectionFromNode(n, fillup=True)
+    (scroll, fragment, line) = T.sectionFromNode(n, fillup=True)
     passageText = app.sectionStrFromNode(n)
-    href = '#' if _noUrl else URL_FORMAT.format(pNum)
+    href = '#' if _noUrl else URL_FORMAT.format(scroll)
     if text is None:
       text = passageText
       title = f'show this {SCROLL} in the Leon Levy library'
@@ -116,17 +113,14 @@ class TfApp(object):
       return result
     dh(result)
 
+  def fmt_layoutOrig(app, n):
+    return app._wrapHtml(n, 'glyph', '')
+
   def fmt_layoutTrans(app, n):
     return app._wrapHtml(n, 'glyph', 'e')
 
-  def fmt_layoutTransX(app, n):
-    return app._wrapHtml(n, 'full', 'e')
-
-  def fmt_layoutUnicode(app, n):
-    return app._wrapHtml(n, 'glyph', '')
-
-  def fmt_layoutUnicodeX(app, n):
-    return app._wrapHtml(n, 'full', '')
+  def fmt_layoutSource(app, n):
+    return app._wrapHtml(n, 'glyph', 'o')
 
   def _wrapHtml(app, n, ft, kind):
     api = app.api
@@ -189,9 +183,9 @@ class TfApp(object):
       else:
         rep = ''
       if nType == LINE:
-        text = hlText(app, L.d(n, otype=SIGN), d.highlights, fmt=d.fmt)
+        text = hlText(app, L.d(n, otype=WORD), d.highlights, fmt=d.fmt)
       elif nType == FRAGMENT:
-        rep += mdhtmlEsc(f'{nType} {F.face.v(n)}') if secLabel else ''
+        rep += mdhtmlEsc(f'{nType} {F.fragment.v(n)}') if secLabel else ''
       elif nType == SCROLL:
         rep += mdhtmlEsc(f'{nType} {F.pnumber.v(n)}') if secLabel else ''
       rep = hlRep(app, rep, n, d.highlights)
@@ -311,7 +305,7 @@ class TfApp(object):
           **options,
       )
     elif nType == FRAGMENT:
-      heading = htmlEsc(F.face.v(n))
+      heading = htmlEsc(F.fragment.v(n))
       featurePart = getFeatures(
           app,
           n,
@@ -319,7 +313,7 @@ class TfApp(object):
           **options,
       )
     elif nType == LINE:
-      heading = htmlEsc(F.lnno.v(n))
+      heading = htmlEsc(F.line.v(n))
       className = LINE
       theseFeats = (BIBLICAL, LINE)
       featurePart = getFeatures(
@@ -368,7 +362,7 @@ class TfApp(object):
       featurePart = getFeatures(
           app,
           n,
-          SIGN_FEATURES,
+          MODIFIERS,
           withName=True,
           **options,
       )

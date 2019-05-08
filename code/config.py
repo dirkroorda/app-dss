@@ -74,10 +74,9 @@ FONT = 'SILEOT.ttf'
 FONTW = 'SILEOT.woff'
 
 TEXT_FORMATS = {
-    'layout-orig-full': 'layoutUnicode',
+    'layout-orig-full': 'layoutOrig',
     'layout-trans-full': 'layoutTrans',
-    'layout-orig-extra': 'layoutUnicodeX',
-    'layout-trans-extra': 'layoutTransX',
+    'layout-source-full': 'layoutSource',
 }
 
 BROWSE_NAV_LEVEL = 2

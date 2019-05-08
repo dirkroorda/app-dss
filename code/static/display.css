@@ -2,21 +2,25 @@
     font-family: sans-serif;
     font-size: normal;
     text-decoration: none;
+    direction: ltr;
 }
 .txte,.txte a:visited,.txte a:link {
     font-family: monospace;
     font-size: normal;
     text-decoration: none;
+    direction: ltr;
 }
 .txto,.txto a:visited,.txto a:link {
     font-family: serif;
     font-size: large;
     text-decoration: none;
+    direction: ltr;
 }
 .txtu,.txtu a:visited,.txtu a:link {
     font-family: "Ezra SIL", "SBL Hebrew", sans-serif;
     font-size: x-large;
     text-decoration: none;
+    direction: rtl;
 }
 .features {
     font-family: monospace;
@@ -90,7 +94,7 @@
 }
 .children.line {
     align-items: stretch;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
 }
 .children.cluster {
     flex-flow: row wrap;
@@ -104,6 +108,7 @@
 }
 .contnr {
     width: fit-content;
+    direction: rtl;
 }
 .contnr.scroll,.contnr.fragment,
 .contnr.line,
@@ -201,11 +206,11 @@
     font-size: x-small;
     color: #0000bb;
 }
-.interlinear1 {
+.intl1 {
     vertical-align: -0.25em;
 }
-.interlinear2 {
-    vertical-align: -0.25em;
+.intl2 {
+    vertical-align: -0.5em;
 }
 .langa {
     text-decoration: underline;
@@ -214,56 +219,64 @@
     font-family: serif;
     text-decoration: underline;
 }
-.vacat1 {
+.vac1 {
     background-color: #aaaaaa;
+    border 2pt solid #dd3333;
+    border-radius: 4pt;
 }
-.removed1 {
-    color: #dd9999;
+.rem1 {
+    font-weight: bold;
+    color: red;
     text-decoration: line-through;
 }
-.removed2 {
-    color: #dd0000;
+.rem2 {
+    font-weight: bold;
+    color: maroon;
     text-decoration: line-through;
 }
-.reconstruction1 {
-    color: #00ffff;
+.rec1 {
+    color: teal;
+    font-size: 80%;
+}
+.cor1 {
+    font-weight: bold;
+    color: dodgerblue;
     text-decoration: overline;
 }
-.correction1 {
-    color: #0000ff;
+.cor2 {
+    font-weight: bold;
+    color: navy;
     text-decoration: overline;
 }
-.correction2 {
-    color: #9999ff;
-    text-decoration: overline;
-}
-.correction3 {
-    color: #9999ff;
+.cor3 {
+    font-weight: bold;
+    color: navy;
     text-decoration: overline;
     vertical-align: super;
 }
-.alternative1 {
-    font-weight: bold;
+.alt1 {
     text-decoration: overline;
 }
 
 /* UNSURE: italic*/
 
-.uncertain1 {
-    font-style: italic
-}
-.uncertain2 {
+.unc1 {
     font-weight: bold;
-    font-style: italic
+    color: #888888;
 }
-.uncertain3 {
-    color: #999999;
-    text-shadow: #bbbbbb 1px 1px;
-}
-.uncertain4 {
+.unc2 {
     font-weight: bold;
-    color: #999999;
-    text-shadow: #bbbbbb 1px 1px;
+    color: #bbbbbb;
+}
+.unc3 {
+    font-weight: bold;
+    color: #bbbbbb;
+    text-shadow: #cccccc 1px 1px;
+}
+.unc4 {
+    font-weight: bold;
+    color: #dddddd;
+    text-shadow: #eeeeee 2px 2px;
 }
 
 /* cluster */
