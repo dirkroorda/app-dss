@@ -15,7 +15,7 @@ OPTIONS = (
 ORG = 'etcbc'
 REPO = 'dss'
 CORPUS = 'Dead Sea Scrolls'
-VERSION = '0.3'
+VERSION = '0.4'
 RELATIVE = 'tf'
 
 DOI_TEXT = '10.5281/zenodo.2652849'
@@ -28,9 +28,22 @@ CHAR_TEXT = 'Hebrew characters and transcriptions'
 
 FEATURE_URL = f'{DOC_URL}/transcription.md'
 
-MODULE_SPECS = ()
+MODULE_SPECS = (
+    dict(
+        org=ORG,
+        repo='dss',
+        relative=f'parallels/{RELATIVE}',
+        corpus='Parallel Passages',
+        docUrl=(
+            'https://nbviewer.jupyter.org/github/etcbc/dss/'
+            'blob/master/programs/parallels.ipynb'
+        ),
+        doiText='10.5281/zenodo.2652849',
+        doiUrl='https://doi.org/10.5281/zenodo.2652849',
+    ),
+)
 
-ZIP = [REPO]
+ZIP = [REPO] + [(m['org'], m['repo'], m['relative']) for m in MODULE_SPECS]
 
 CONDENSE_TYPE = 'line'
 
@@ -38,16 +51,6 @@ NONE_VALUES = {None, 'unknown'}
 
 STANDARD_FEATURES = None  # meaning all loadable features
 
-EXCLUDED_FEATURES = set(
-    '''
-    fullo
-    glypho
-    lexo
-    punco
-    morpho
-    srcLn
-    '''
-)
 EXCLUDED_FEATURES = set()
 
 NO_DESCEND_TYPES = {'lex'}
