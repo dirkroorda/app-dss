@@ -24,6 +24,7 @@ HALFVERSE = 'halfverse'
 BIBLICAL = 'biblical'
 SRCLN = 'srcLn'
 LANG = 'lang'
+SCRIPT = 'script'
 INTERLINEAR = 'intl'
 
 CONTENT_FEATURES = '''
@@ -64,7 +65,7 @@ MORPH_FEATURES = '''
 
 WORD_FEATURES = tuple([BIBLICAL] + LEX_FEATURES + MORPH_FEATURES)
 
-MODIFIERS = tuple([LANG, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:])
+MODIFIERS = tuple([LANG, SCRIPT, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:])
 
 URL_FORMAT = (
     "https://www.deadseascrolls.org.il/explore-the-archive/search#q='{}'"

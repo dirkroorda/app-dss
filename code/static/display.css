@@ -206,14 +206,20 @@
     font-size: x-small;
     color: #0000bb;
 }
+.scriptpaleohebrew {
+    border: 1px dashed navy;
+}
+.scriptgreekcapital {
+    border: 1px dashed brown;
+}
+.langa {
+    text-decoration: underline;
+}
 .intl1 {
     vertical-align: -0.25em;
 }
 .intl2 {
     vertical-align: -0.5em;
-}
-.langa {
-    text-decoration: underline;
 }
 .langg {
     font-family: serif;
