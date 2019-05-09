@@ -188,7 +188,7 @@ class TfApp(object):
       elif nType == FRAGMENT:
         rep += mdhtmlEsc(f'{nType} {F.fragment.v(n)}') if secLabel else ''
       elif nType == SCROLL:
-        rep += mdhtmlEsc(f'{nType} {F.pnumber.v(n)}') if secLabel else ''
+        rep += mdhtmlEsc(f'{nType} {F.scroll.v(n)}') if secLabel else ''
       rep = hlRep(app, rep, n, d.highlights)
       if text:
         text = hlRep(app, text, n, d.highlights)
@@ -296,7 +296,7 @@ class TfApp(object):
     isText = False
 
     if nType == SCROLL:
-      heading = htmlEsc(F.pnumber.v(n))
+      heading = htmlEsc(F.scroll.v(n))
       heading += ' '
       heading += getFeatures(
           app,
