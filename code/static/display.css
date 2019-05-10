@@ -22,6 +22,12 @@
     text-decoration: none;
     direction: rtl;
 }
+.full,.glyph,.lex,.punc {
+    font-family: "Ezra SIL", "SBL Hebrew", sans-serif;
+}
+.lex {
+  color: mediumblue;
+}
 .features {
     font-family: monospace;
     font-size: medium;
