@@ -352,8 +352,7 @@ class TfApp(object):
       featurePart = getFeatures(
           app,
           n,
-          ('voc_lex', 'gloss'),
-          givenValue=dict(voc_lex=app.webLink(n, text=htmlEsc(F.voc_lex.v(n)), _asString=True)),
+          ('lex', 'lexe', 'lexo'),
           **options,
       ) + occs
     elif nType == slotType:
