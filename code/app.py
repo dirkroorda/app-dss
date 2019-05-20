@@ -27,6 +27,9 @@ LANG = 'lang'
 SCRIPT = 'script'
 INTERLINEAR = 'intl'
 
+EMPTY = 'empty'
+NB = '\u00a0'
+
 CONTENT_FEATURES = '''
   glyph
   glyphe
@@ -128,10 +131,12 @@ class TfApp(object):
     F = api.F
     Fs = api.Fs
     after = F.after.v(n) or ''
-    material = Fs(f'{ft}{kind}').v(n) or ''
+    isEmpty = F.type.v(n) == EMPTY
+    material = NB if isEmpty else (Fs(f'{ft}{kind}').v(n) or '')
     classes = ' '.join(f'{cf}{Fs(cf).v(n)}' for cf in MODIFIERS if Fs(cf).v(n))
+    empty = ' empty' if isEmpty else ''
     if classes:
-      material = f'<span class="{classes}">{material}</span>'
+      material = f'<span class="{classes}{empty}">{material}</span>'
     return f'{material}{after}'
 
   def _plain(
@@ -366,8 +371,8 @@ class TfApp(object):
           withName=True,
           **options,
       )
-      if not outer and F.type.v(n) == 'empty':
-        return
+      # if not outer and F.type.v(n) == 'empty':
+      #  return
 
     tClass = display.formatClass[d.fmt].lower() if isText else app.defaultCls
     heading = f'<span class="{tClass}">{heading}</span>'
