@@ -15,7 +15,7 @@ OPTIONS = (
 ORG = 'etcbc'
 REPO = 'dss'
 CORPUS = 'Dead Sea Scrolls'
-VERSION = '0.4'
+VERSION = '0.5'
 RELATIVE = 'tf'
 
 DOI_TEXT = '10.5281/zenodo.2652849'
