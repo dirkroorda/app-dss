@@ -21,6 +21,7 @@
     font-size: x-large;
     text-decoration: none;
     direction: rtl;
+    unicode-bidi: embed;
 }
 .full,.glyph,.lex,.punc {
     font-family: "Ezra SIL", "SBL Hebrew", sans-serif;
