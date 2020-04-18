@@ -1,46 +1,13 @@
-import os
-
-from tf.core.helpers import mdhtmlEsc, htmlEsc, mdEsc
-from tf.applib.helpers import dh
-from tf.applib.display import prettyPre, getBoundary, getFeatures
-from tf.applib.highlight import hlText, hlRep
+from tf.applib.helpers import dh, NB
 from tf.applib.api import setupApi
 from tf.applib.links import outLink
 
-REPORT_DIR = "reports"
-
-SCROLL = "scroll"
-FRAGMENT = "fragment"
-LINE = "line"
-CLUSTER = "cluster"
-WORD = "word"
-SIGN = "sign"
-
-BOOK = "book"
-CHAPTER = "chapter"
-VERSE = "verse"
-HALFVERSE = "halfverse"
-
-BIBLICAL = "biblical"
-SRCLN = "srcLn"
-LANG = "lang"
-SCRIPT = "script"
-INTERLINEAR = "intl"
-
 EMPTY = "empty"
-NB = "\u00a0"
 
-CONTENT_FEATURES = """
-  glyph
-  glyphe
-  glypho
-""".strip().split()
-
-FLAG_FEATURES = """
-    unc
-""".strip().split()
-
-CLUSTER_FEATURES = """
+MODIFIERS = """
+    lang
+    script
+    intl
     unc
     cor
     rem
@@ -49,42 +16,28 @@ CLUSTER_FEATURES = """
     vac
 """.strip().split()
 
-LEX_FEATURES = """
-    lang
-    lex
-""".strip().split()
-
-MORPH_FEATURES = """
-    sp
-    cl
-    ps
-    gn
-    nu
-    st
-    vs
-    vt
-    md
-""".strip().split()
-
-WORD_FEATURES = tuple([BIBLICAL] + LEX_FEATURES + MORPH_FEATURES)
-
-MODIFIERS = tuple([LANG, SCRIPT, INTERLINEAR] + FLAG_FEATURES + CLUSTER_FEATURES[1:])
-
 URL_FORMAT = "https://www.deadseascrolls.org.il/explore-the-archive/search#q='{}'"
 
-SECTION = {SCROLL, FRAGMENT, LINE}
+
+def notice(app):
+    if int(app.api.TF.version.split(".")[0]) <= 7:
+        print(
+            f"""
+Your Text-Fabric is outdated.
+It cannot load this version of the TF app `{app.appName}`.
+Recommendation: upgrade Text-Fabric to version 8.
+Hint:
+
+    pip3 install --upgrade text-fabric
+
+"""
+        )
 
 
 class TfApp(object):
     def __init__(app, *args, _asApp=False, silent=False, **kwargs):
         setupApi(app, *args, _asApp=_asApp, silent=silent, **kwargs)
-
-        if app.api:
-            app.reportDir = f"{app.repoLocation}/{REPORT_DIR}"
-
-        if not _asApp:
-            for cdir in (app.tempDir, app.reportDir):
-                os.makedirs(cdir, exist_ok=True)
+        notice(args[0])
 
     def webLink(app, n, text=None, className=None, _asString=False, _noUrl=False):
         api = app.api
@@ -95,7 +48,7 @@ class TfApp(object):
         href = "#" if _noUrl else URL_FORMAT.format(scroll)
         if text is None:
             text = passageText
-            title = f"show this {SCROLL} in the Leon Levy library"
+            title = f"show this scroll in the Leon Levy library"
         else:
             title = passageText
         if _noUrl:
@@ -135,225 +88,3 @@ class TfApp(object):
         if classes:
             material = f'<span class="{classes}{empty}">{material}</span>'
         return f"{material}{after}"
-
-    def _plain(
-        app, n, passage, isLinked, _asString, secLabel, **options,
-    ):
-        display = app.display
-        d = display.get(options)
-
-        _asApp = app._asApp
-        api = app.api
-        F = api.F
-        L = api.L
-        T = api.T
-
-        nType = F.otype.v(n)
-        result = passage
-        if _asApp:
-            nodeRep = f' <a href="#" class="nd">{n}</a> ' if d.withNodes else ""
-        else:
-            nodeRep = f" <i>{n}</i> " if d.withNodes else ""
-
-        rep = ""
-        text = ""
-        if nType == SIGN:
-            text = hlText(app, [n], d.highlights, fmt=d.fmt)
-        elif nType == WORD:
-            text = hlText(app, L.d(n, otype=SIGN), d.highlights, fmt=d.fmt)
-        elif nType in SECTION:
-            if secLabel and d.withPassage:
-                sep1 = app.sectionSep1
-                sep2 = app.sectionSep2
-                label = (
-                    "{}"
-                    if nType == SCROLL
-                    else f"{{}}{sep1}{{}}"
-                    if nType == FRAGMENT
-                    else f"{{}}{sep1}{{}}{sep2}{{}}"
-                )
-                rep = label.format(*T.sectionFromNode(n))
-                rep = mdhtmlEsc(rep)
-                rep = hlRep(app, rep, n, d.highlights)
-                if isLinked:
-                    rep = app.webLink(n, text=f"{rep}&nbsp;", _asString=True)
-            else:
-                rep = ""
-            if nType == LINE:
-                text = hlText(app, L.d(n, otype=WORD), d.highlights, fmt=d.fmt)
-            elif nType == FRAGMENT:
-                rep += mdhtmlEsc(f"{nType} {F.fragment.v(n)}") if secLabel else ""
-            elif nType == SCROLL:
-                rep += mdhtmlEsc(f"{nType} {F.scroll.v(n)}") if secLabel else ""
-            rep = hlRep(app, rep, n, d.highlights)
-            if text:
-                text = hlRep(app, text, n, d.highlights)
-        elif nType == "lex":
-            rep = mdhtmlEsc(F.lex.v(n))
-            rep = hlRep(app, rep, n, d.highlights)
-        else:
-            rep = hlText(app, L.d(n, otype=SIGN), d.highlights, fmt=d.fmt)
-        lineNumbersCondition = d.lineNumbers
-        if text:
-            tClass = display.formatClass[d.fmt].lower()
-            text = f'<span class="{tClass}">{text}</span>'
-            rep += text
-        rep = app._addLink(
-            n,
-            rep,
-            nodeRep,
-            isLinked=isLinked and not passage and nType not in SECTION,
-            lineNumbers=lineNumbersCondition,
-        )
-        result += rep
-
-        if _asString or _asApp:
-            return result
-        dh(result)
-
-    def _addLink(app, n, rep, nodeRep, isLinked=None, lineNumbers=True):
-        F = app.api.F
-        if isLinked:
-            rep = app.webLink(n, text=rep, _asString=True)
-        theLine = ""
-        if lineNumbers:
-            theLine = mdEsc(f" @{F.srcLn.v(n)} ")
-        return f"{rep}{nodeRep}{theLine}"
-
-    def _pretty(
-        app, n, outer, html, firstSlot, lastSlot, **options,
-    ):
-        display = app.display
-        d = display.get(options)
-
-        goOn = prettyPre(app, n, firstSlot, lastSlot, d)
-        if not goOn:
-            return
-        (
-            slotType,
-            nType,
-            isBigType,
-            className,
-            boundaryClass,
-            hlAtt,
-            nodePart,
-            myStart,
-            myEnd,
-        ) = goOn
-
-        api = app.api
-        F = api.F
-        L = api.L
-        T = api.T
-        isHtml = options.get("fmt", None) in app.textFormats
-
-        (hlClass, hlStyle) = hlAtt
-
-        heading = ""
-        featurePart = ""
-        children = ()
-
-        if isBigType:
-            children = ()
-        elif nType == SCROLL:
-            children = L.d(n, otype=FRAGMENT)
-        elif nType == FRAGMENT:
-            children = L.d(n, otype=LINE)
-        elif nType == LINE:
-            children = tuple(c for c in L.d(n) if F.otype.v(c) == WORD)
-        elif nType == WORD:
-            children = L.d(n, otype=SIGN)
-        elif nType == CLUSTER:
-            children = L.d(n, otype=SIGN)
-
-        isText = False
-
-        if nType == SCROLL:
-            heading = htmlEsc(F.scroll.v(n))
-            heading += " "
-            heading += getFeatures(app, n, (BIBLICAL, SCROLL), plain=True, **options,)
-        elif nType == FRAGMENT:
-            heading = htmlEsc(F.fragment.v(n))
-            featurePart = getFeatures(app, n, (BIBLICAL, FRAGMENT), **options,)
-        elif nType == LINE:
-            heading = htmlEsc(F.line.v(n))
-            className = LINE
-            theseFeats = (BIBLICAL, LINE)
-            featurePart = getFeatures(app, n, theseFeats, **options,)
-        elif nType == CLUSTER:
-            heading = F.type.v(n)
-            featurePart = getFeatures(app, n, (), **options,)
-        elif nType == WORD:
-            isText = True
-            text = T.text(n, fmt=d.fmt, descend=True)
-            heading = text if isHtml else htmlEsc(text)
-            theseFeats = WORD_FEATURES
-            if d.lineNumbers:
-                theseFeats = (SRCLN,) + theseFeats
-            featurePart = getFeatures(app, n, theseFeats, **options,)
-        elif nType == "lex":
-            extremeOccs = getBoundary(api, n)
-            linkOccs = " - ".join(app.webLink(lo, _asString=True) for lo in extremeOccs)
-            heading = f'<div class="h">{htmlEsc(F.lex.v(n))}</div>'
-            occs = f'<div class="occs">{linkOccs}</div>'
-            featurePart = (
-                getFeatures(app, n, ("lex", "lexe", "lexo"), **options,) + occs
-            )
-        elif nType == slotType:
-            isText = True
-            text = T.text(n, fmt=d.fmt)
-            heading = text if isHtml else htmlEsc(text)
-            featurePart = getFeatures(app, n, MODIFIERS, withName=True, **options,)
-            # if not outer and F.type.v(n) == 'empty':
-            #  return
-
-        tClass = display.formatClass[d.fmt].lower() if isText else app.defaultCls
-        heading = f'<span class="{tClass}">{heading}</span>'
-
-        if outer:
-            typePart = app.webLink(n, text=f"{nType} {heading}", _asString=True)
-        else:
-            typePart = heading
-
-        label = (
-            f"""
-    <div class="lbl {className}">
-        {typePart}
-        {nodePart}
-    </div>
-"""
-            if typePart or nodePart
-            else ""
-        )
-
-        html.append(
-            f"""
-<div class="contnr {className} {hlClass}" {hlStyle}>
-    {label}
-    <div class="meta">
-        {featurePart}
-    </div>
-"""
-        )
-        if children:
-            html.append(
-                f"""
-    <div class="children {className}">
-"""
-            )
-
-        for ch in children:
-            app._pretty(
-                ch, False, html, firstSlot, lastSlot, **options,
-            )
-        if children:
-            html.append(
-                """
-    </div>
-"""
-            )
-        html.append(
-            """
-</div>
-"""
-        )

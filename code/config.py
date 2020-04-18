@@ -1,11 +1,10 @@
 from os.path import dirname, abspath
 
+API_VERSION = 1
+
 PROTOCOL = "http://"
 HOST = "localhost"
-PORT = dict(kernel=18987, web=8107,)
-
-OPTIONS = (("lineNumbers", False, "checkbox", "linen", "show line numbers"),)
-
+PORT = dict(kernel=18987, web=8107)
 
 ORG = "etcbc"
 REPO = "dss"
@@ -40,6 +39,7 @@ MODULE_SPECS = (
 
 ZIP = [REPO] + [(m["org"], m["repo"], m["relative"]) for m in MODULE_SPECS]
 
+BASE_TYPE = "word"
 CONDENSE_TYPE = "line"
 
 NONE_VALUES = {None, "unknown"}
@@ -56,12 +56,8 @@ EXAMPLE_SECTION_TEXT = "1Q1 f1:1"
 SECTION_SEP1 = " "
 SECTION_SEP2 = ":"
 
-DEFAULT_CLS = "txtn"
-DEFAULT_CLS_ORIG = "txtu"
-
-FORMAT_CSS = dict(orig="txtu", trans="txte", source="txto",)
-
-CLASS_NAMES = None
+WRITING = "hbo"
+WRITING_DIR = "rtl"
 
 FONT_NAME = "Ezra SIL"
 FONT = "SILEOT.ttf"
@@ -75,6 +71,57 @@ TEXT_FORMATS = {
 
 BROWSE_NAV_LEVEL = 2
 BROWSE_CONTENT_PRETTY = False
+
+VERSES = None
+
+LEX = "lex"
+
+TRANSFORM = None
+
+CHILD_TYPE = dict(
+    scroll="fragment",
+    fragment="line",
+    line="word",
+    verse="word",
+    half_verse="word",
+    word="sign",
+    cluster="sign",
+)
+
+SUPER_TYPE = None
+
+PLAIN_TYPES = None
+
+PRETTY_TYPES = dict(
+    scroll=("{scroll}", "biblical", ""),
+    fragment=("{fragment}", "biblical", ""),
+    line=("{line}", "biblical", ""),
+    cluster=("{type}", "", ""),
+    word=(True, "", "lang lex sp cl ps gn nu st vs vt md"),
+    lex=(None, "", "lex lexe lexo"),
+    sign=(True, "", ""),
+)
+
+LEVELS = dict(
+    scroll=dict(level=3, flow="col", wrap=False, stretch=False),
+    fragment=dict(level=3, flow="col", wrap=False, strectch=False),
+    line=dict(level=2, flow="row", wrap=True, strectch=True),
+    cluster=dict(level=2, flow="row", wrap=True, strectch=False),
+    word=dict(level=1, flow="row", wrap=False, strectch=True),
+    lex=dict(level=1, flow="col", wrap=False, strectch=True),
+    sign=dict(level=0, flow="col", wrap=False, strectch=False),
+)
+
+
+INTERFACE_DEFAULTS = dict(
+    withTypes=True,
+    withNodes=False,
+    showFeatures=True,
+    lineNumbers=False,
+    graphics=None,
+)
+
+LINE_NUMBERS = dict(word="srcLn")
 
 
 def deliver():
