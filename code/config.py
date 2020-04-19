@@ -72,7 +72,7 @@ TEXT_FORMATS = {
 BROWSE_NAV_LEVEL = 2
 BROWSE_CONTENT_PRETTY = False
 
-VERSES = None
+VERSE_TYPES = None
 
 LEX = "lex"
 
@@ -113,13 +113,7 @@ LEVELS = dict(
 )
 
 
-INTERFACE_DEFAULTS = dict(
-    withTypes=True,
-    withNodes=False,
-    showFeatures=True,
-    lineNumbers=False,
-    graphics=None,
-)
+INTERFACE_DEFAULTS = dict()
 
 LINE_NUMBERS = dict(word="srcLn")
 
