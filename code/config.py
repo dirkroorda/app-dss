@@ -90,28 +90,50 @@ CHILD_TYPE = dict(
 
 SUPER_TYPE = None
 
-PLAIN_TYPES = None
-
-PRETTY_TYPES = dict(
-    scroll=("{scroll}", "biblical", ""),
-    fragment=("{fragment}", "biblical", ""),
-    line=("{line}", "biblical", ""),
-    cluster=("{type}", "", ""),
-    word=(True, "", "lang lex sp cl ps gn nu st vs vt md"),
-    lex=(None, "", "lex lexe lexo"),
-    sign=(True, "", ""),
+TYPE_DISPLAY = dict(
+    scroll=dict(
+        template="{scroll}",
+        bareFeatures="",
+        features="biblical",
+        level=3, flow="col", wrap=False, stretch=False,
+    ),
+    fragment=dict(
+        template="{fragment}",
+        bareFeatures="",
+        features="biblical",
+        level=3, flow="col", wrap=False, strectch=False,
+    ),
+    line=dict(
+        template="{line}",
+        bareFeatures="",
+        features="biblical",
+        level=2, flow="row", wrap=True, strectch=True,
+    ),
+    cluster=dict(
+        template="{type}",
+        bareFeatures="",
+        features="",
+        level=2, flow="row", wrap=True, strectch=False,
+    ),
+    word=dict(
+        template=True,
+        bareFeatures="sp",
+        features="lang lex cl ps gn nu st vs vt md",
+        level=1, flow="row", wrap=False, strectch=True,
+    ),
+    lex=dict(
+        template=None,
+        bareFeatures="lexo",
+        features="lex lexe",
+        level=1, flow="col", wrap=False, strectch=True,
+    ),
+    sign=dict(
+        template=True,
+        bareFeatures="",
+        features="",
+        level=0, flow="col", wrap=False, strectch=False,
+    ),
 )
-
-LEVELS = dict(
-    scroll=dict(level=3, flow="col", wrap=False, stretch=False),
-    fragment=dict(level=3, flow="col", wrap=False, strectch=False),
-    line=dict(level=2, flow="row", wrap=True, strectch=True),
-    cluster=dict(level=2, flow="row", wrap=True, strectch=False),
-    word=dict(level=1, flow="row", wrap=False, strectch=True),
-    lex=dict(level=1, flow="col", wrap=False, strectch=True),
-    sign=dict(level=0, flow="col", wrap=False, strectch=False),
-)
-
 
 INTERFACE_DEFAULTS = dict()
 

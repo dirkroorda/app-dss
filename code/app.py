@@ -35,11 +35,11 @@ Hint:
 
 
 class TfApp(object):
-    def __init__(app, *args, _asApp=False, silent=False, **kwargs):
-        setupApi(app, *args, _asApp=_asApp, silent=silent, **kwargs)
-        notice(args[0])
+    def __init__(app, *args, **kwargs):
+        setupApi(app, *args, **kwargs)
+        notice(app)
 
-    def webLink(app, n, text=None, className=None, _asString=False, _noUrl=False):
+    def webLink(app, n, text=None, clsName=None, _asString=False, _noUrl=False):
         api = app.api
         T = api.T
 
@@ -59,7 +59,7 @@ class TfApp(object):
             text,
             href,
             title=title,
-            className=className,
+            clsName=clsName,
             target=target,
             passage=passageText,
         )
@@ -83,8 +83,8 @@ class TfApp(object):
         after = F.after.v(n) or ""
         isEmpty = F.type.v(n) == EMPTY
         material = NB if isEmpty else (Fs(f"{ft}{kind}").v(n) or "")
-        classes = " ".join(f"{cf}{Fs(cf).v(n)}" for cf in MODIFIERS if Fs(cf).v(n))
+        clses = " ".join(f"{cf}{Fs(cf).v(n)}" for cf in MODIFIERS if Fs(cf).v(n))
         empty = " empty" if isEmpty else ""
-        if classes:
-            material = f'<span class="{classes}{empty}">{material}</span>'
+        if clses:
+            material = f'<span class="{clses}{empty}">{material}</span>'
         return f"{material}{after}"
