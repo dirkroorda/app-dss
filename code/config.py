@@ -39,105 +39,77 @@ MODULE_SPECS = (
 
 ZIP = [REPO] + [(m["org"], m["repo"], m["relative"]) for m in MODULE_SPECS]
 
-BASE_TYPE = "word"
-CONDENSE_TYPE = "line"
-
-NONE_VALUES = {None, "unknown"}
-
-STANDARD_FEATURES = None  # meaning all loadable features
-
-EXCLUDED_FEATURES = set()
-
-NO_DESCEND_TYPES = {"lex"}
-
 EXAMPLE_SECTION = "<code>1Q1 f1:1</code>"
 EXAMPLE_SECTION_TEXT = "1Q1 f1:1"
 
-SECTION_SEP1 = " "
-SECTION_SEP2 = ":"
-
-WRITING = "hbo"
-WRITING_DIR = "rtl"
-
-FONT_NAME = "Ezra SIL"
-FONT = "SILEOT.ttf"
-FONTW = "SILEOT.woff"
-
-TEXT_FORMATS = {
-    "layout-orig-full": "layoutOrig",
-    "layout-trans-full": "layoutTrans",
-    "layout-source-full": "layoutSource",
-}
-
-BROWSE_NAV_LEVEL = 2
-BROWSE_CONTENT_PRETTY = False
-
-VERSE_TYPES = None
-
-LEX = "lex"
-
-TRANSFORM = None
-
-CHILD_TYPE = dict(
-    scroll="fragment",
-    fragment="line",
-    line="word",
-    verse="word",
-    half_verse="word",
-    word="sign",
-    cluster="sign",
+DATA_DISPLAY = dict(
+    noneValues={None, "unknown"},
+    sectionSep1=" ",
+    sectionSep2=":",
+    writing="hbo",
+    writingDir="rtl",
+    fontName="Ezra SIL",
+    font="SILEOT.ttf",
+    fontw="SILEOT.woff",
+    textFormats={
+        "layout-orig-full": "layoutOrig",
+        "layout-trans-full": "layoutTrans",
+        "layout-source-full": "layoutSource",
+    },
+    browseNavLevel=2,
+    browseContentPretty=False,
 )
-
-SUPER_TYPE = None
 
 TYPE_DISPLAY = dict(
     scroll=dict(
         template="{scroll}",
-        bareFeatures="",
         features="biblical",
+        children="fragment",
         level=3, flow="col", wrap=False, stretch=False,
     ),
     fragment=dict(
         template="{fragment}",
-        bareFeatures="",
         features="biblical",
+        children="line",
         level=3, flow="col", wrap=False, strectch=False,
     ),
     line=dict(
         template="{line}",
-        bareFeatures="",
         features="biblical",
+        children="word",
+        condense=True,
         level=2, flow="row", wrap=True, strectch=True,
     ),
     cluster=dict(
         template="{type}",
-        bareFeatures="",
-        features="",
+        children="sign",
         level=2, flow="row", wrap=True, strectch=False,
     ),
     word=dict(
         template=True,
-        bareFeatures="sp",
+        featuresBare="sp",
         features="lang lex cl ps gn nu st vs vt md",
+        children="sign",
+        base=True,
+        lineNumber="srcLn",
         level=1, flow="row", wrap=False, strectch=True,
     ),
     lex=dict(
-        template=None,
-        bareFeatures="lexo",
+        template="{lex}",
+        featuresBare="lexo",
         features="lex lexe",
+        lexTarget="word",
         level=1, flow="col", wrap=False, strectch=True,
     ),
     sign=dict(
         template=True,
-        bareFeatures="",
-        features="",
         level=0, flow="col", wrap=False, strectch=False,
     ),
 )
 
-INTERFACE_DEFAULTS = dict()
-
-LINE_NUMBERS = dict(word="srcLn")
+INTERFACE_DEFAULTS = dict(
+    lineNumbers=False,
+)
 
 
 def deliver():
