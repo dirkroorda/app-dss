@@ -44,72 +44,33 @@ EXAMPLE_SECTION_TEXT = "1Q1 f1:1"
 
 DATA_DISPLAY = dict(
     noneValues={None, "unknown"},
-    sectionSep1=" ",
-    sectionSep2=":",
     writing="hbo",
-    writingDir="rtl",
-    fontName="Ezra SIL",
-    font="SILEOT.ttf",
-    fontw="SILEOT.woff",
     textFormats={
         "layout-orig-full": "layoutOrig",
         "layout-trans-full": "layoutTrans",
         "layout-source-full": "layoutSource",
     },
-    browseNavLevel=2,
-    browseContentPretty=False,
 )
 
 TYPE_DISPLAY = dict(
-    scroll=dict(
-        template="{scroll}",
-        features="biblical",
-        children="fragment",
-        level=3, flow="col", wrap=False, stretch=False,
-    ),
-    fragment=dict(
-        template="{fragment}",
-        features="biblical",
-        children="line",
-        level=3, flow="col", wrap=False, strectch=False,
-    ),
-    line=dict(
-        template="{line}",
-        features="biblical",
-        children="word",
-        condense=True,
-        level=2, flow="row", wrap=True, strectch=True,
-    ),
-    cluster=dict(
-        template="{type}",
-        children="sign",
-        level=2, flow="row", wrap=True, strectch=False,
-    ),
+    scroll=dict(features="biblical",),
+    fragment=dict(features="biblical",),
+    line=dict(features="biblical", children="word",),
+    cluster=dict(template="{type}", children="sign", stretch=False,),
     word=dict(
         template=True,
         featuresBare="sp",
         features="lang lex cl ps gn nu st vs vt md",
-        children="sign",
         base=True,
         lineNumber="srcLn",
-        level=1, flow="row", wrap=False, strectch=True,
+        wrap=False,
     ),
     lex=dict(
-        template="{lex}",
-        featuresBare="lexo",
-        features="lex lexe",
-        lexTarget="word",
-        level=1, flow="col", wrap=False, strectch=True,
-    ),
-    sign=dict(
-        template=True,
-        level=0, flow="col", wrap=False, strectch=False,
+        template="{lex}", featuresBare="lexo", features="lex lexe", lexTarget="word",
     ),
 )
 
-INTERFACE_DEFAULTS = dict(
-    lineNumbers=False,
-)
+INTERFACE_DEFAULTS = dict(lineNumbers=False,)
 
 
 def deliver():
