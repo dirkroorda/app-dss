@@ -7,7 +7,7 @@
 [![DOI](https://zenodo.org/badge/184505167.svg)](https://zenodo.org/badge/latestdoi/184505167)
 
 This is a
-[Text-Fabric](https://githubv.com/annotation/text-fabric) app
+[Text-Fabric](https://github.com/annotation/text-fabric) app
 for working with
 [Dead Sea Scrolls](https://github.com/etcbc/dss): Biblical and non-biblical scrolls found
 in Qumran near the Dead Sea.
