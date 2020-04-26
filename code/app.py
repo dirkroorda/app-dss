@@ -1,29 +1,13 @@
 from tf.applib.helpers import NB
-from tf.applib.api import setupApi
-
-
-def notice(app):
-    if int(app.api.TF.version.split(".")[0]) <= 7:
-        print(
-            f"""
-Your Text-Fabric is outdated.
-It cannot load this version of the TF app `{app.appName}`.
-Recommendation: upgrade Text-Fabric to version 8.
-Hint:
-
-    pip3 install --upgrade text-fabric
-
-"""
-        )
+from tf.applib.app import App
 
 
 MODIFIERS = "lang script intl unc cor rem rec alt vac".strip().split()
 
 
-class TfApp(object):
+class TfApp(App):
     def __init__(app, *args, **kwargs):
-        setupApi(app, *args, **kwargs)
-        notice(app)
+        super().__init__(*args, **kwargs)
 
     def fmt_layoutOrig(app, n):
         return app._wrapHtml(n, "glyph", "")

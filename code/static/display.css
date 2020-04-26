@@ -1,16 +1,6 @@
 .full,.glyph,.punc {
     font-family: "Ezra SIL", "SBL Hebrew", sans-serif;
 }
-.name {
-    font-family: monospace;
-    font-size: medium;
-    color: #0000bb;
-}
-.text {
-    font-family: sans-serif;
-    font-size: x-small;
-    color: #000000;
-}
 .scriptpaleohebrew {
     border: 1px dashed navy;
 }
