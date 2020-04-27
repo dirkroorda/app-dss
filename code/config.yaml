@@ -7,7 +7,6 @@ dataDisplay:
     layout-orig-full: layoutOrig
     layout-source-full: layoutSource
     layout-trans-full: layoutTrans
-  writing: hbo
 docs:
   docPage: about
   featureBase: '{docBase}'
@@ -53,3 +52,4 @@ typeDisplay:
     lineNumber: srcLn
     template: true
     wrap: false
+writing: hbo
