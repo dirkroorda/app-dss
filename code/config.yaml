@@ -18,7 +18,7 @@ provenanceSpec:
   doi: 10.5281/zenodo.2652849
   moduleSpecs:
   - corpus: Parallel Passages
-    docUrl: '{nbUrl}/etcbc/dss/blob/master/programs/parallels.ipynb'
+    docUrl: '{urlNb}/etcbc/dss/blob/master/programs/parallels.ipynb'
     doi: 10.5281/zenodo.2652849
     relative: parallels/tf
     repo: dss
@@ -27,12 +27,12 @@ provenanceSpec:
   version: '0.6'
   webBase: https://www.deadseascrolls.org.il/explore-the-archive
   webHint: Show this scroll in the Leon Levy library
-  webUrl: '{base}/search#q=''{<1>}'''
+  webUrl: "{webBase}/search#q='<1>'"
 typeDisplay:
   cluster:
     children: sign
     stretch: false
-    template: '{type}'
+    label: '{type}'
   fragment:
     features: biblical
   lex:
@@ -40,6 +40,7 @@ typeDisplay:
     featuresBare: lexo
     lexOcc: word
     template: '{lex}'
+    label: '{lex}'
   line:
     children: word
     features: biblical
@@ -51,5 +52,6 @@ typeDisplay:
     featuresBare: sp
     lineNumber: srcLn
     template: true
+    label: true
     wrap: false
 writing: hbo
