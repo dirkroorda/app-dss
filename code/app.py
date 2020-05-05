@@ -1,3 +1,4 @@
+import types
 from tf.applib.helpers import NB
 from tf.applib.app import App
 
@@ -5,18 +6,24 @@ from tf.applib.app import App
 MODIFIERS = "lang script intl unc cor rem rec alt vac".strip().split()
 
 
+def fmt_layoutOrig(app, n):
+    return app._wrapHtml(n, "glyph", "")
+
+
+def fmt_layoutTrans(app, n):
+    return app._wrapHtml(n, "glyph", "e")
+
+
+def fmt_layoutSource(app, n):
+    return app._wrapHtml(n, "glyph", "o")
+
+
 class TfApp(App):
     def __init__(app, *args, **kwargs):
+        app.fmt_layoutOrig = types.MethodType(fmt_layoutOrig, app)
+        app.fmt_layoutTrans = types.MethodType(fmt_layoutTrans, app)
+        app.fmt_layoutSource = types.MethodType(fmt_layoutSource, app)
         super().__init__(*args, **kwargs)
-
-    def fmt_layoutOrig(app, n):
-        return app._wrapHtml(n, "glyph", "")
-
-    def fmt_layoutTrans(app, n):
-        return app._wrapHtml(n, "glyph", "e")
-
-    def fmt_layoutSource(app, n):
-        return app._wrapHtml(n, "glyph", "o")
 
     def _wrapHtml(app, n, ft, kind):
         api = app.api

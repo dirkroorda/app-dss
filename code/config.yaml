@@ -51,7 +51,6 @@ typeDisplay:
     features: lang lex cl ps gn nu st vs vt md
     featuresBare: sp
     lineNumber: srcLn
-    template: true
     label: true
     wrap: false
 writing: hbo
