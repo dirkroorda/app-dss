@@ -6,15 +6,15 @@ from tf.applib.app import App
 MODIFIERS = "lang script intl unc cor rem rec alt vac".strip().split()
 
 
-def fmt_layoutOrig(app, n):
+def fmt_layoutOrig(app, n, **kwargs):
     return app._wrapHtml(n, "glyph", "")
 
 
-def fmt_layoutTrans(app, n):
+def fmt_layoutTrans(app, n, **kwargs):
     return app._wrapHtml(n, "glyph", "e")
 
 
-def fmt_layoutSource(app, n):
+def fmt_layoutSource(app, n, **kwargs):
     return app._wrapHtml(n, "glyph", "o")
 
 
