@@ -5,7 +5,7 @@ dataDisplay:
   - null
   textFormats:
     layout-orig-full: 
-     method: layoutOrig
+      method: layoutOrig
     layout-source-full:
       method:  layoutSource
     layout-trans-full:
