@@ -3,6 +3,7 @@ dataDisplay:
   noneValues:
   - unknown
   - null
+  showVerseInTuple: true
   textFormats:
     layout-orig-full: 
       method: layoutOrig
