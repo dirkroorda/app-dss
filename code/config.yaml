@@ -46,12 +46,14 @@ typeDisplay:
     template: True
     label: True
   line:
-    children: word
+    children:
+      - word
     features: biblical
   scroll:
     features: biblical
   word:
     base: true
+    children: sign
     features: lang lex cl ps gn nu st vs vt md
     featuresBare: sp
     lineNumber: srcLn
