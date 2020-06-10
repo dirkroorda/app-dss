@@ -1,6 +1,6 @@
 import types
-from tf.applib.helpers import NB
-from tf.applib.app import App
+from tf.advanced.helpers import NB
+from tf.advanced.app import App
 
 
 MODIFIERS = "lang script intl unc cor rem rec alt vac".strip().split()

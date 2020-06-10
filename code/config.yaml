@@ -1,4 +1,4 @@
-apiVersion: 2
+apiVersion: 3
 dataDisplay:
   noneValues:
   - unknown
@@ -42,11 +42,9 @@ typeDisplay:
     features: lex lexe
     featuresBare: lexo
     lexOcc: word
-    template: True
-    label: True
+    template: true
+    label: true
   line:
-    xChildren:
-      - sign
     features: biblical
   scroll:
     features: biblical
@@ -57,4 +55,7 @@ typeDisplay:
     lineNumber: srcLn
     label: true
     wrap: false
+  sign:
+    exclude:
+      type: term
 writing: hbo
