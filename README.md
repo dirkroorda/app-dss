@@ -15,8 +15,6 @@ in Qumran near the Dead Sea.
 Get started with the
 [tutorial](https://nbviewer.jupyter.org/github/annotation/tutorials/blob/master/dss/start.ipynb).
 
-It offers this [API](https://annotation.github.io/text-fabric/Api/App/).
-
 See also
 [about](https://github.com/etcbc/dss/blob/master/docs/about.md),
 [transcription](https://github.com/etcbc/dss/blob/master/docs/transcription.md).
