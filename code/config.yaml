@@ -13,7 +13,7 @@ dataDisplay:
       method:  layoutTrans
 docs:
   docPage: about
-  featureBase: '{docBase}'
+  featureBase: '{docBase}/transcription.md'
   featurePage: transcription
 interfaceDefaults:
   lineNumbers: false
