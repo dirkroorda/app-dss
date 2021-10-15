@@ -48,6 +48,10 @@ typeDisplay:
     features: biblical
   scroll:
     features: biblical
+  clause:
+    label: '{nr}'
+  phrase:
+    label: '{nr}'
   word:
     base: true
     features: lang lex cl ps gn nu st vs vt md
