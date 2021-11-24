@@ -28,7 +28,7 @@ provenanceSpec:
     repo: dss
   org: etcbc
   repo: dss
-  version: '0.8'
+  version: '0.9'
   webBase: https://www.deadseascrolls.org.il/explore-the-archive
   webHint: Show this scroll in the Leon Levy library
   webUrl: "{webBase}/search#q='<1>'"

@@ -3,8 +3,8 @@
 # Dead Sea Scrolls
 
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/annotation/app-dss/)](https://archive.softwareheritage.org/browse/origin/https://github.com/annotation/app-dss/)
-
 [![DOI](https://zenodo.org/badge/184505167.svg)](https://zenodo.org/badge/latestdoi/184505167)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 This is a
 [Text-Fabric](https://github.com/annotation/text-fabric) app
@@ -20,3 +20,8 @@ See also
 [transcription](https://github.com/etcbc/dss/blob/master/docs/transcription.md).
 
 ![shot](images/shot.png)
+
+# Author
+
+[Dirk Roorda](https://github.com/dirkroorda)
+
